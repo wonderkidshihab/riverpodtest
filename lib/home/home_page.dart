@@ -9,11 +9,8 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final todosLength = ref.watch(todosProvider).when(
-          data: (todos) => todos.length,
-          loading: () => 0,
-          error: (err, stack) => -1,
-        );
+    final todosLength =
+        ref.watch(todosProvider.select((value) => value.value?.length ?? 0));
     return Scaffold(
       appBar: AppBar(
         title: const Text('Todos List'),
@@ -43,6 +40,7 @@ class HomePage extends ConsumerWidget {
         child: const Icon(Icons.add),
       ),
       body: ListView.separated(
+        padding: const EdgeInsets.all(16),
         itemBuilder: (context, index) {
           final todo = ref.watch(todosProvider
               .select((value) => value.value!.elementAtOrNull(index)));
@@ -63,6 +61,14 @@ class HomePage extends ConsumerWidget {
                 color: todo.status == TodoStatus.completed
                     ? Colors.green
                     : Colors.red,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 4,
+                    offset: Offset(0, 4),
+                  ),
+                ],
               ),
               child: Column(
                 children: [
@@ -120,7 +126,7 @@ class HomePage extends ConsumerWidget {
           );
         },
         separatorBuilder: (context, index) {
-          return const Divider();
+          return const SizedBox(height: 16);
         },
         itemCount: todosLength,
       ),
