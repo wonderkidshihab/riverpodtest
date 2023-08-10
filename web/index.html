@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <!--
+  <head>
+    <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
 
@@ -14,46 +14,94 @@
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
-  <base href="$FLUTTER_BASE_HREF">
+    <base href="$FLUTTER_BASE_HREF" />
 
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+    <meta charset="UTF-8" />
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+    <meta name="description" content="A new Flutter project." />
 
-  <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="riverpodtest">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+    <!-- iOS meta tags & icons -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="riverpodtest" />
+    <link rel="apple-touch-icon" href="icons/Icon-192.png" />
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png" />
 
-  <title>riverpodtest</title>
-  <link rel="manifest" href="manifest.json">
+    <title>riverpodtest</title>
+    <link rel="manifest" href="manifest.json" />
 
-  <script>
-    // The value below is injected by flutter build, do not touch.
-    var serviceWorkerVersion = null;
-  </script>
-  <!-- This script adds the flutter initialization JS code -->
-  <script src="flutter.js" defer></script>
-</head>
-<body>
-  <script>
-    window.addEventListener('load', function(ev) {
-      // Download main.dart.js
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-        },
-        onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
-            appRunner.runApp();
-          });
-        }
+    <script>
+      // The value below is injected by flutter build, do not touch.
+      var serviceWorkerVersion = null;
+    </script>
+    <!-- This script adds the flutter initialization JS code -->
+    <script src="flutter.js" defer></script>
+    <!-- <script src="other_app/main.dart.js"></script> -->
+  </head>
+  <body>
+    <style>
+      body {
+        background-color: #15202b;
+        color: #ffffff;
+        margin: 0;
+      }
+
+      div {
+        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+        font-size: 24px;
+        margin-top: 48px;
+        height: 500px;
+        width: 800px;
+        float: left;
+      }
+    </style>
+    <div id="element1" height="300px"></div>
+    <div id="element2" height="300px"></div>
+    <div id="element3" height="300px"></div>
+    <script>
+      window.addEventListener("load", async function (ev) {
+        var element1 = document.querySelector("#element1");
+        var element2 = document.querySelector("#element2");
+        var element3 = document.querySelector("#element3");
+        loadFlutterEntryPoint(_flutter, element1, "main.dart.js");
+        // wait 5 seconds
       });
-    });
-  </script>
-</body>
+
+      function loadFlutterEntryPoint(flutter, element, entrypointUrl) {
+        flutter.loader.loadEntrypoint({
+          serviceWorker: {
+            serviceWorkerVersion: serviceWorkerVersion,
+          },
+          entrypointUrl: entrypointUrl,
+          onEntrypointLoaded: function (engineInitializer) {
+            engineInitializer
+              .initializeEngine({
+                hostElement: element,
+              })
+              .then(function (engine) {
+                engine.runApp();
+              });
+          },
+        });
+      }
+
+      async function someData(data) {
+        console.log(data);
+      }
+
+      function recieveDataFromDart(data) {
+        // data: String month, int sales
+        // create an element with this data and add a new div to element2 each time
+        // data is recieved
+        var element2 = document.querySelector("#element2");
+        var newDiv = document.createElement("h1");
+        // add className to newDiv
+        newDiv.className = "month";
+        newDiv.innerHTML = data;
+        element2.appendChild(newDiv);
+      }
+    </script>
+  </body>
 </html>
